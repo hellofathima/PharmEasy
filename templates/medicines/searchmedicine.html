@@ -1,0 +1,105 @@
+{% extends 'base3.html' %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Background color */
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .medicine-card {
+            border-radius: 2px; 
+            margin: 10px;
+            margin-bottom: 25px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow */
+            background-color: #ffffff; /* Card background color */
+            width: 300px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .medicine-card img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .btn.btn-primary {
+            background-color: #51eaea; /* Button background color */
+            border-color: #51eaea; /* Button border color */
+            color: black;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease-in-out;
+        }
+        
+        .btn.btn-primary:hover {
+            background-color: transparent; /* Hover background color */
+            color: #51eaea; /* Hover text color */
+        }
+        
+        #price {
+            font-size: 15px;
+            color: rgb(16, 220, 16); /* Price color */
+            margin-bottom: 10px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .search-message {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<p class="search-message">You searched for: "{{ query }}"</p>
+
+<div class="container">
+    {% for item in medicines %}
+    <div class="medicine-card">
+        {% if item.image %}
+        <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.medicine_name }}">
+        {% endif %}
+        {% if item.product_image %}
+        <img src="{{ item.product_image.url }}" class="card-img-top" alt="{{ item.product_name }}">
+        {% endif %}
+        <div class="card-body">
+            {% if item.medicine_name %}
+            <h5 class="card-title">{{ item.medicine_name }}</h5>
+            {% endif %}
+            {% if item.product_name %}
+            <h5 class="card-title">{{ item.product_name }}</h5>
+            {% endif %}
+            <p id="price" class="card-text">₹{{ item.price }}</p>
+            <a href="{% if item.product_name %}{% url 'dev-details' item.id %}{% else %}{% url 'medicine_details' item.id %}{% endif %}" class="btn btn-primary">View Details</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

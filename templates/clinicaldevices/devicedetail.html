@@ -1,0 +1,56 @@
+<!-- device_detail.html -->
+
+{% extends 'base3.html' %}
+
+{% block content %}
+<style>
+
+
+.card img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.card-body {
+    padding: 10px; /* Add padding to the card body for better spacing */
+}
+.card img {
+        width: 100%;
+        max-height: 200px; /* Adjust the maximum height of the image */
+        object-fit: contain;
+    }
+
+    .card-body {
+        padding: 20px; /* Add padding to the card body for better spacing */
+    }
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card device-card shadow">
+                {% if device.product_image %}
+                <img src="{{ device.product_image.url }}" class="card-img-top" alt="{{ device.product_name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ device.product_name }}</h5>
+                    <p class="card-text">{{ device.description }}</p>
+                    <p id="price" class="card-text">₹{{ device.price }}</p>
+                    <p class="card-text">{{ device.phone }}</p>
+
+
+                    
+                    <!-- Add to Cart button -->
+                    <form action="" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <a href="{%url 'add_to_cart' device.id%}" class="btn btn-success">Add To Cart</a>
+                    </form>
+                    <!-- Buy Now button -->
+                    <a href="" class="btn btn-success">Buy Now</a>
+                    <!-- Add other device details as needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base3.html' %}
+{% block content %}
+
+<style>
+  .myform {
+        background-color: aliceblue;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        padding: 30px;
+        margin-top: 50px;
+        width: 100%;
+        transition: all 1.3s ease;
+    }
+    
+    .form-control {
+        font-size: 16px;
+        border-radius: 5px;
+        padding: 10px;
+        
+        margin-right: 30px; /* Added margin top to create gap */
+    }
+    
+    .btn.btn-primary {
+        background-color: #51eaea;
+      border-color: #51eaea;
+      color: black;
+      margin-top: 30px;
+    }
+    .btn.btn-primary:hover  {
+        background: transparent;
+      color: #51eaea;
+      border-color: #51eaea;
+    }
+</style>
+
+
+    <center>
+        <h2>Enter your details here!</h2>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form method="post" class="myform">
+                    {% csrf_token %}
+                    <div class="mb-4 row">
+                        <label class="form-label col-sm-3">Address</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control border-color" name="address" placeholder="Enter address">
+                        </div>
+                    </div>
+                    <div class="mb-4 row">
+                        <label class="form-label col-sm-3">Phone</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control border-color" name="phone" placeholder="Enter phone">
+                        </div>
+                    </div>
+                    <div class="mb-4 row">
+                        <label class="form-label col-sm-3">Account number</label>
+                        <div class="col-sm-9">
+                            <input type="number" class="form-control border-color" name="Acc_number" placeholder="Enter account number" required>
+                        </div>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <input type="submit" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</center>
+{% endblock %}
