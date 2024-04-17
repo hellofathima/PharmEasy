@@ -70,3 +70,5 @@ class AdminForm(forms.Form):
     password = forms.CharField(max_length=100)    
 
 
+class FeedbackForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)

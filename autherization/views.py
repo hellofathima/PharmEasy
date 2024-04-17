@@ -1,8 +1,6 @@
 from django.shortcuts import render
 
 # Create your views here.
-def index(request):
-    return render(request, "autherization/index.html")
 
 from django.shortcuts import render, redirect
 from .forms import *
@@ -14,6 +12,16 @@ from django.contrib.auth import authenticate
 from django.core.mail import send_mail
 from django.contrib.auth import logout
 from django.core.validators import RegexValidator
+from medicines.models import *
+from devices.models import *
+from django.views.decorators.cache import never_cache
+from django.contrib.auth.decorators import login_required
+
+def index(request):
+    feedbacks = Feedback.objects.all()[:4]
+    medicines = Medicine_inventory.objects.all()[:6]
+    devices = DeviceInformation.objects.all()[:4]
+    return render(request, "autherization/index.html", {'feedbacks': feedbacks, 'medicines': medicines, 'devices':devices})
 
 
 def customer_signup(request):
@@ -100,8 +108,30 @@ def login_view(request):
     return render(request, 'autherization/login.html', {'form': form})
 
 
+@login_required
+@never_cache
 def customer_panel_view(request):
-    return render(request, 'autherization/customer_panel.html')
+    feedbacks = Feedback.objects.all()[:4]
+    medicines = Medicine_inventory.objects.all()[:6]
+    devices = DeviceInformation.objects.all()[:4]
+
+    return render(request, "autherization/customer_panel.html", {'feedbacks': feedbacks, 'medicines': medicines, 'devices':devices})
+
+
+def add_feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            user = request.user
+            feedback = Feedback.objects.create(user=user, comment=comment)
+            feedback.save()
+            # return redirect('feedback_success')  # Redirect to a success page
+            return HttpResponse("success")
+    else:
+        form = FeedbackForm()
+
+    return render(request, 'autherization/add_feedback.html',{'form':form})
 
 
 def   doctor_panel_view(request):

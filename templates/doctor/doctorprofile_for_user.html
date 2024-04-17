@@ -43,7 +43,7 @@
             <p class="card-text">License Number: {{ doctor.license_number }}</p>
             <p class="card-text">Designation: {{ doctor.Designation }}</p>
             <p class="card-text">Department: {{ doctor.Department }}</p>
-            <p class="card-text">Profile: {{ doctor.Profile }}</p>
+            <p class="card-text">Profile: {{ doctor.profile }}</p>
             <p class="card-text">Address: {{ doctor.address }}</p>
             <p class="card-text">Phone: {{ doctor.phone }}</p>
 
@@ -57,13 +57,14 @@
 
                 <p id="available" class="card-text">Available</p>
 
-                <a href=""    class="btn btn-primary">Book Doctor</a>
+                <a href="{% url 'book_appointment' doctor.user.id %}" class="btn btn-primary">Book Doctor</a>
 
                 {% endif %}
 
             {% else %}
             <p id="not_available" class="card-text">Not available</p>
             {% endif %}
+            
             
         </div>
       </div>

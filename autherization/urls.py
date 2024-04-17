@@ -3,7 +3,7 @@ from django.urls import path,include
 from autherization.views import *
 urlpatterns = [
 
-path('index/',index,name='index'),
+path('',index,name='index'),
 
 path('signup/customer/', customer_signup, name='customer_signup'),
 path('signup/doctor/', doctor_signup, name='Doctor_signup'),
@@ -24,5 +24,6 @@ path('reset/', reset_password, name="reset_password"),
 path('change_password/<int:id>', change_password, name="change_password"),
 
 path('logout/', logout_view, name="logout_view"),
+path('success/', add_feedback, name="add_feedback"),
 
 ]

@@ -45,21 +45,17 @@ from doctor.models import *
 #         self.fields['doctor'].widget.attrs['disabled'] = True
 
 
-class BookingForm(forms.ModelForm):
-    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
-    time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-    reason = forms.CharField(widget=forms.Textarea)
+from django import forms
+from .models import Booking
 
+from django import forms
+from .models import Booking
+
+class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['date', 'time', 'reason']
-
-    def __init__(self, *args, **kwargs):
-        doctor = kwargs.pop('doctor', None)
-        super().__init__(*args, **kwargs)
-        if doctor:
-            self.fields['doctor'].initial = doctor.name
-            self.fields['doctor'].widget.attrs['readonly'] = True
-            if doctor.Department:
-                # Set the initial value for the department field
-                self.initial['department'] = doctor.Department
+        fields = [ 'date', 'time', 'reason']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 200px; height: 40px; padding: 5px;'}),
+        }

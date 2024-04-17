@@ -23,11 +23,7 @@
 
 
   <style>
-     #logo{
-      width: 230px;
-      height: 150px;
-      margin-left: -50px;
-    }
+     
     .text-dark 
       {
           font-size: 18px;
@@ -80,7 +76,7 @@
         <div class="d-flex align-items-center justify-content-between">
           <div class="logo">
             <div class="site-logo">
-              <a href="{% url 'index' %}" class="js-logo-clone"><img id="logo" src="{% static 'images\pharmeasy-high-resolution-logo.png' %}"></a>
+              <a href="{% url 'index' %}" class="js-logo-clone"><img id="logo" src="{% static 'images\pharmeasy-high-resolution-logo.png' %}" style="width: 150px;height: 100px;"></a>
             </div>
           </div>
           <div class="main-nav d-none d-lg-block">
@@ -126,10 +122,13 @@
             </nav>
           </div>
           <div class="icons">
-            <a href="#" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
-            <a href="cart.html" class="icons-btn d-inline-block bag">
+            <a href="{% url 'search-medicine' %}" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+            <a href="{% url 'cart_view' %}" class="icons-btn d-inline-block heart" style="color: red;">
+              <span class="icon-heart"></span>
+          </a>
+            <a href="{% url 'med_cart_view' %}" class="icons-btn d-inline-block bag">
               <span class="icon-shopping-bag"></span>
-              <span class="number">2</span>
+              <span class="number">{{count}}</span>
             </a>
             <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
                 class="icon-menu"></span></a>

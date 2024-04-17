@@ -37,9 +37,17 @@ class Doctor(models.Model):
     address = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=False, null=True)
     is_available = models.BooleanField(default=True, null=True)
+    has_requested= models.BooleanField(default=True, null=True)
 
     # def __str__(self):
     #     return self.user.username 
     def __str__(self):
         return self.name if self.name else f"Doctor {self.pk}"
 # 
+class Feedback(models.Model):
+    user = models.ForeignKey(NormalUser, on_delete=models.CASCADE)
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def _str_(self):
+        return f"Feedback from {self.user.username} at {self.created_at}"

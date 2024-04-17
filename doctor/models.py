@@ -22,8 +22,9 @@ class Booking(models.Model):
         ('Pediatrics', 'Pediatrics'),
         ('Gynecology', 'Gynecology'),
         ('Dermatology', 'Dermatology'),
+        ('Psycology', 'Psycology'),
     ]
-    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
+    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES,default='Cardiology',null=True)
 
     def __str__(self):
         return f"Booking for {self.patient.username} with {self.doctor.user.username} on {self.date} at {self.time}"
