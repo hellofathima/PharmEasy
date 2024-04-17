@@ -59,3 +59,31 @@ class BookingForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 200px; height: 40px; padding: 5px;'}),
         }
+
+class DoctorProfileUpdateForm(forms.ModelForm):
+    email = forms.EmailField(label='Email', required=False)
+    name = forms.CharField(label='Name', required=False)
+    Designation = forms.CharField(max_length=20)
+    Department = forms.CharField(max_length=20) 
+
+    class Meta:
+        model = Doctor
+        fields = [ 'name', 'email', 'image', 'profile', 'address', 'phone', 'Designation', 'Department' ]
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(DoctorProfileUpdateForm, self).__init__(*args, **kwargs)
+        if self.instance.user:
+            self.initial['name'] = self.instance.user.name
+            self.initial['email'] = self.instance.user.email
+
+    def save(self, commit=True):
+        doctor = super().save(commit=False)
+        if commit:
+            doctor.save()
+        return doctor
+    
+

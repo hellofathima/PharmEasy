@@ -11,7 +11,7 @@ from django.urls import reverse_lazy,reverse
 from django.contrib import messages
 from django.views.generic import TemplateView,DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.core.mail import send_mail
 
 from django.views.decorators.cache import never_cache
 # Create your views here.
@@ -128,6 +128,115 @@ class DoctorUserList(ListView):
        queryset = queryset.filter(doctor=self.request.user.id,is_confirmed=False)
        return queryset
     
+
+def request_approval(request, id):
+    bookings = Booking.objects.filter(id=id)
+    
+    for booking in bookings:
+        user_name = booking.patient.username
+        user_email = booking.patient.email
+        booking.is_confirmed = True
+        booking.save()
+
+    # Update nurse availability
+    doctor = Doctor.objects.get(user=request.user)
+    doctor.is_available = False
+    doctor.save()
+
+    # Send email to user
+    subject = "Your Home Nurse Request Has Been Approved"
+    message = (
+        f"Dear {user_name},\n\n"
+        "We are pleased to inform you that your request for doctor appoinment has been approved!\n\n"
+        "At Pharmeasy, we are committed to providing you with the best possible care and support.\n\n"
+        "Your assigned nurse will be in touch with you shortly to discuss the details of your care plan.\n\n"
+        "Thank you for choosing CareLink. We look forward to assisting you in your journey to better health.\n\n"
+        "Best regards,\n"
+        "The PharmEasy Team"
+    )
+    email_from = "pharmeasy305@gmail.com"
+    email_to = user_email
+    send_mail(subject, message, email_from, [email_to])
+
+    return redirect('doctorpanel')
+
+
+
+def doctor_profile(request):
+    # Retrieve the current logged-in user
+    current_user = request.user
+    
+    # Query the Nurse model to get the nurse profile associated with the current user
+    try:
+        doctor_profile = Doctor.objects.get(user=current_user)
+
+
+    except Doctor.DoesNotExist:
+        # Handle the case where the nurse profile does not exist
+        doctor_profile = None
+    
+    # Pass the nurse profile data to the template context
+    context = {
+        'doctor_profile': doctor_profile
+    }
+    
+    # Render the template with the provided context
+    return render(request, 'doctor/doctorprofile.html',context)
+
+
+from django.views.generic import UpdateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class DoctorProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Doctor
+    form_class =DoctorProfileUpdateForm
+    template_name = 'doctor/change_profile.html'
+    success_url = reverse_lazy('doctor_profile')
+    context_object_name="doctor_profile"
+
+    
+    def get_object(self, queryset=None):
+        return Doctor.objects.get(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['email'] = self.request.user.email
+        context['name'] = self.request.user.name
+        return context
+    
+
+    def get_initial(self):
+       
+        initial = super().get_initial()
+        
+        user = self.request.user
+        initial['email'] = user.email
+        
+
+        initial['name'] = user.name  
+        
+    def form_valid(self, form):
+        
+        doctor_profile = form.save(commit=False)
+        doctor_profile.save()
+
+        self.request.user.email = form.cleaned_data['email']
+        self.request.user.save()
+        self.request.user.name= form.cleaned_data['name']
+        self.request.user.save()
+
+
+        messages.success(self.request, "Profile updated successfully")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Failed to update profile")
+        return super().form_invalid(form)
+
+
+
+   
 
 
 

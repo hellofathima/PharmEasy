@@ -23,7 +23,7 @@
   <script src="https://kit.fontawesome.com/234803766d.js" crossorigin="anonymous"></script>
 <style>
   body {
-        /* background-image: url("{% static 'images/pexels-background.jpg' %}"); */
+        background-image: url("{% static 'images/pexels-registration_bg.jpg' %}");
         background-size: cover;
         background-color: aliceblue;
         background-repeat: no-repeat;
@@ -31,11 +31,7 @@
       
     }
     
-    #logo{
-      width: 230px;
-      height: 150px;
-      margin-left: -50px;
-    }
+    
 </style>
 </head>
 
@@ -69,8 +65,8 @@
                 <li class="has-children">
                   <a href="#">Store</a>
                   <ul class="dropdown">
-                    <li><a href="">Medicines</a></li>
-                    <li><a href="">Clinical Devices</a></li>
+                    <li><a href="{%url 'medicines_list'%}">Medicines</a></li>
+                    <li><a href="{%url 'listdevices' %}">Clinical Devices</a></li>
                 
                 </ul>
               </li>
@@ -88,11 +84,11 @@
                         <li><a href="#">Tea &amp; Coffee</a></li>
                       </ul>
                     </li> -->
-                    <li><a href="">Doctor</a></li>
+                    <li><a href="{%url 'doctors' %}">Doctor</a></li>
                     
                   </ul>
                 </li>
-                <li><a href="">About</a></li>
+                <!-- <li><a href="">About</a></li> -->
                 <li><a href="#"><i class="fa-solid fa-user"></i> {{ request.user.username }}</a></li>
 
                 <!-- <li><a href="contact.html">Contact</a></li> -->

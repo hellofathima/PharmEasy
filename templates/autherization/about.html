@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>CareLink</title>
+    <title>PharmEasy</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -59,74 +59,70 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="logo">
                         <div class="site-logo">
-                            <a href="{% url 'index' %}" class="js-logo-clone"><img
-                                    src="{% static 'images\carelink-high-resolution-logo-transparent.png' %}"
-                                    style="width: 150px;height: 100px;"></a>
+                            <a href="{% url 'index' %}" class="js-logo-clone"><img id="logo" src="{% static 'images\pharmeasy-high-resolution-logo.png' %}" style="width: 150px;height: 100px;"></a>
                         </div>
                     </div>
                     <div class="main-nav d-none d-lg-block">
                         <nav class="site-navigation text-right text-md-center" role="navigation">
                             <ul class="site-menu js-clone-nav d-none d-lg-block">
-                                <li class="active"><a href="{% url 'index' %}">Home</a></li>
+                                <li class="active"><a href="{% url 'customerpanel' %}">Home</a></li>
                                 <li class="has-children">
                                     <a href="#">Store</a>
                                     <ul class="dropdown">
-                                        <li><a href="{% url 'listmedicines' %}">Medicines</a></li>
-                                        <li><a href="{% url 'device_page' %}">Clinical Devices</a></li>
+                                        <li><a href="{% url 'medicines_list' %}">Medicines</a></li>
+                                        <li><a href="{% url 'listdevices' %}">Clinical Devices</a></li>
 
                                     </ul>
                                 </li>
                                 <li class="has-children">
                                     <a href="#">Services</a>
                                     <ul class="dropdown">
-                                        <li><a href="{% url 'approved_nurses_list' %}">Home nurse</a></li>
-                                        <li><a href="{% url 'devicepanel' %}">Be a Seller?</a></li>
-
-                                    </ul>
+                                      <li><a href="{%url 'doctors' %}">doctors</a></li>
+                                  
+                                  </ul>
                                 </li>
-                                <li class="has-children">
-                                    <a href="#">Registrations</a>
-                                    <ul class="dropdown">
-                                        <li><a href="http://127.0.0.1:8000/autherization/signup/customer/">Customer</a>
-                                        </li>
+                                    <li class="has-children">
+                                      <a href="#">Registrations</a>
+                                      <ul class="dropdown">
+                                        <li><a href="{%url 'customer_signup'%}">Customer</a></li>
                                         <!-- <li class="has-children">
-                      <a href="#">Vitamins</a>
-                      <ul class="dropdown">
-                        <li><a href="#">Supplements</a></li>
-                        <li><a href="#">Vitamins</a></li>
-                        <li><a href="#">Diet &amp; Nutrition</a></li>
-                        <li><a href="#">Tea &amp; Coffee</a></li>
-                      </ul>
-                    </li> -->
-                                        <li><a href="http://127.0.0.1:8000/autherization/signup/nurse/">Nurse</a></li>
-                                        <li><a href="http://127.0.0.1:8000/autherization/signup/shop/">Medical store</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li><a href="{% url 'aboutus' %}">About</a></li>
-                                <!-- <li><a href="contact.html">Contact</a></li> -->
-                                <li><a href="{% url 'login' %}">Login</a></li>
-                            </ul>
+                                          <a href="#">Vitamins</a>
+                                          <ul class="dropdown">
+                                            <li><a href="#">Supplements</a></li>
+                                            <li><a href="#">Vitamins</a></li>
+                                            <li><a href="#">Diet &amp; Nutrition</a></li>
+                                            <li><a href="#">Tea &amp; Coffee</a></li>
+                                          </ul>
+                                        </li> -->
+                                        <li><a href="{% url 'Doctor_signup' %}">Doctor</a></li>
+                                        
+                                      </ul>
+                                    </li>
+                                    <li><a href="{% url 'aboutus' %}">About</a></li>
+                                    <!-- <li><a href="contact.html">Contact</a></li> -->
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                  </ul>
                         </nav>
                     </div>
                     <div class="icons">
-                        <a href="#" class="icons-btn d-inline-block js-search-open"><span
-                                class="icon-search"></span></a>
-                        <a href="cart.html" class="icons-btn d-inline-block bag">
-                            <span class="icon-shopping-bag"></span>
-                            <span class="number">2</span>
+                        <a href="{% url 'search-medicine' %}" class="icons-btn d-inline-block js-search-open"><span class="icon-search"></span></a>
+                        <a href="{% url 'cart_view' %}" class="icons-btn d-inline-block heart" style="color: red;">
+                          <span class="icon-heart"></span>
+                      </a>
+                        <a href="{% url 'med_cart_view' %}" class="icons-btn d-inline-block bag">
+                          <span class="icon-shopping-bag"></span>
+                          <span class="number">{{count}}</span>
                         </a>
                         <a href="#" class="site-menu-toggle js-menu-toggle ml-3 d-inline-block d-lg-none"><span
-                                class="icon-menu"></span></a>
-                    </div>
+                            class="icon-menu"></span></a>
+                      </div>
                 </div>
             </div>
         </div>
         <div class="container">
             <h2>Our Story</h2>
             <p id="p1">
-                Welcome to PharmEasy– your one-click solution for accessible healthcare. Our mission is to bring the
+                Welcome to PharmEasy! your one-click solution for accessible healthcare. Our mission is to bring the
                 widest range of 100% genuine products to your doorstep, spanning categories like Nutrition &
                 Supplements, Personal Care, Health Aid & Fitness, and essential clinical devices for patients, all
                 within an affordable budget. We also provide loyal, qualified, and experienced Doctors to meet your
