@@ -31,7 +31,7 @@ from medicines.models import Medicine_inventory
 
 class ExpiredMedicine(models.Model):
     medicine = models.ForeignKey(Medicine_inventory, on_delete=models.CASCADE)
-    expiry_date = models.DateTimeField()
+    expiry_date = models.DateTimeField(null=True,blank=True,auto_now_add=True)
 
     def __str__(self):
         return self.medicine.medicine_name

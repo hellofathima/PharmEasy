@@ -246,3 +246,11 @@ def itemcart_remove(request,id):
     except:
         pass
     return redirect('med_cart_view')
+
+def order_view(request):
+    user = request.user
+    orders = MedicineOrder.objects.filter(user=user)
+    return render(request,'cart/order_view.html', {'orders': orders})
+
+
+

@@ -58,9 +58,11 @@
                 <li class="has-children">
                   <a href="#">Services</a>
                   <ul class="dropdown">
-                    <li><a href="">Doctor</a></li>
+                    <li><a href="{%url 'doctors' %}">Doctor</a></li>
                   </ul>
                 </li>
+                <li><a href="{%url 'order_view'%}">Myorders</a></li>
+
                 <li><a href=""><i class="fa-solid fa-user"></i> {{ request.user.username }}</a></li>
               </ul>
             </nav>
@@ -70,6 +72,7 @@
             <a href="{% url 'cart_view' %}" class="icons-btn d-inline-block heart" style="color: red;">
               <span class="icon-heart"></span>
           </a>
+
             <a href="{% url 'med_cart_view' %}" class="icons-btn d-inline-block bag">
               <span class="icon-shopping-bag"></span>
               <span class="number">{{count}}</span>

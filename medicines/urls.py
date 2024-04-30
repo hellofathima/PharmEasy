@@ -25,5 +25,6 @@ path('nutrition_detail/<int:pk>/',NutritionDetailView.as_view(), name="nutrition
 path('diabetes/',  DiabetesView.as_view(), name='diabetes'),
 path('diabetes_detail/<int:pk>/',DiabetesDetailView.as_view(), name="diabetes_detail"),
 
+
 ]
 

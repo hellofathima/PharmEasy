@@ -96,7 +96,7 @@
             <h5 class="card-title">{{ item.product_name }}</h5>
             {% endif %}
             <p id="price" class="card-text">₹{{ item.price }}</p>
-            <a href="{% if item.product_name %}{% url 'dev-details' item.id %}{% else %}{% url 'medicine_details' item.id %}{% endif %}" class="btn btn-primary">View Details</a>
+            <a href="{% if item.product_name %}{% url 'device_detail' item.id %}{% else %}{% url 'medicine_details' item.id %}{% endif %}" class="btn btn-primary">View Details</a>
         </div>
     </div>
     {% endfor %}

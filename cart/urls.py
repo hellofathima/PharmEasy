@@ -15,5 +15,6 @@ urlpatterns=[
     path("cart/medorder/",MedorderForm,name="medorder"),
     path("cart/payment/", medorder_confirm_view, name="payment"),
     path("cart/itemremove/<int:id>/",itemcart_remove , name="itemremove"),
+    path("order_view/", order_view, name="order_view"),
 
 ]

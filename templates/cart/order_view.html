@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+{% extends 'base3.html' %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+    /* Custom CSS for button color and image size */
+    .btn-custom {
+        background-color: #E7D192; /* Change button color */
+        border-color: #E7D192; /* Change button border color */
+        color: #333; /* Change button text color */
+        width: 100%; /* Ensure full width for buttons */
+        margin-bottom: 10px; /* Add spacing between buttons */
+        border-radius: 5px; /* Add rounded corners */
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    }
+
+    .img-custom {
+        height: 200px; /* Set fixed height for images */
+        width: 100%; /* Ensure uniform sizing */
+        object-fit: cover; /* Maintain aspect ratio */
+        border-radius: 5px; /* Add rounded corners */
+        transition: transform 0.3s ease; /* Smooth transition */
+    }
+
+    .dropdown-box {
+        width: 100%; /* Set dropdown box width to match parent */
+        background-color: #F3F3F3; /* Change background color */
+        border-radius: 5px; /* Add rounded corners */
+        padding: 10px; /* Add padding */
+        margin-top: 10px; /* Add spacing */
+    }
+
+    /* CSS animations for hover effects */
+    .btn-custom:hover {
+        background-color: #D0C17D; /* Change button color on hover */
+        border-color: #D0C17D; /* Change button border color on hover */
+        color: #fff; /* Change button text color on hover */
+    }
+
+    .img-custom:hover {
+        transform: scale(1.05); /* Scale image on hover */
+    }
+</style>
+
+<div class="container">
+    <h1 class="mt-4 mb-3">Your Order Details</h1>
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-4">
+            <div class="mb-4">
+                <button class="btn btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails{{ order.id }}" aria-expanded="false" aria-controls="collapseDetails{{ order.id }}">
+                    
+                    <div class="card card-body dropdown-box">
+                        
+                    
+
+           
+
+                        <img src="{{ order.medicine.image.url }}" class="img-fluid img-custom rounded-start" alt="Package Image">
+                    </div>
+
+                    
+                    
+                    <p><strong>Total:</strong> ₹{{ order.total_price }}</p>
+                    <p><strong>Name</strong> {{order.medicine.medicine_name }}</p>
+                    <p><strong>Address:</strong> {{ order.address }}</p>
+                    <p><strong>Phone:</strong> {{ order.phone }}</p>
+        
+                    <div class="card card-body dropdown-box">
+                        
+                    
+
+                        <p><strong>Order Status:</strong> {{ order.order_status }}</p>
+                        <p><strong>Delivery Status:</strong> {{ order.delivary_status }}</p>
+                    </div>
+
+                </button>
+                <div class="collapse" id="collapseDetails{{ order.id }}">
+                   
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,56 +1,53 @@
-<!-- device_detail.html -->
+
 
 {% extends 'base3.html' %}
-
 {% block content %}
 <style>
-
-
-.card img {
-    width: 100%;
-    object-fit: contain;
-}
-
-.card-body {
-    padding: 10px; /* Add padding to the card body for better spacing */
-}
-.card img {
+    .row{
+        margin-top: 20px;
+    }
+    .figure img{
         width: 100%;
-        max-height: 200px; /* Adjust the maximum height of the image */
-        object-fit: contain;
+        height: 400px; 
+        object-fit: cover; 
     }
-
-    .card-body {
-        padding: 20px; /* Add padding to the card body for better spacing */
+    .card-title{
+        font-size: 35px;
+        color:rgb(56, 56, 56);
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        
     }
+    #price{
+        font-size: 25px;
+        color: rgb(16, 220, 16);
+    }
+    
 </style>
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card device-card shadow">
+    <div class="row">
+        <div class="col-6">
+            <figure class="figure">
                 {% if device.product_image %}
-                <img src="{{ device.product_image.url }}" class="card-img-top" alt="{{ device.product_name }}">
+                <img src="{{ device.product_image.url }}" class="figure-img img-fluid rounded" alt="{{device.product_name}}">
                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ device.product_name }}</h5>
+            </figure>
+        </div>
+        <div class="col-6">
+            
+                    <h5 class="card-title"><b>{{ device.product_name }}</b></h5>
+                    <p class="card-text" id="price">₹{{ device.price }}</p>
                     <p class="card-text">{{ device.description }}</p>
-                    <p id="price" class="card-text">₹{{ device.price }}</p>
                     <p class="card-text">{{ device.phone }}</p>
-
-
                     
-                    <!-- Add to Cart button -->
-                    <form action="" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <a href="{%url 'add_to_cart' device.id%}" class="btn btn-success">Add To Cart</a>
-                    </form>
-                    <!-- Buy Now button -->
-                    <a href="" class="btn btn-success">Buy Now</a>
-                    <!-- Add other device details as needed -->
-                </div>
-            </div>
+                    
+                        <a href="{%url 'add_to_cart' device.id%}" id="add-to-cart" class="btn btn-primary">Add to Cart</a> 
+                    
+                
         </div>
     </div>
 </div>
+
+
+
 
 {% endblock %}

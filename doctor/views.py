@@ -71,9 +71,40 @@ from django.shortcuts import render, redirect, get_object_or_404
 from doctor.models import Doctor
 from .forms import BookingForm
 
+# def book_appointment(request, pk):
+#     # Get the doctor instance
+#     doctor = get_object_or_404(Doctor, id=pk)
+    
+#     if request.method == 'POST':
+#         form = BookingForm(request.POST)
+#         if form.is_valid():
+#             # Get the current user and assign it to the patient field
+#             patient = request.user
+#             form.instance.patient = patient
+#             form.instance.doctor = doctor  # Assign the Doctor instance directly
+            
+#             # Fetch the department information from the related Doctor instance
+#             # department = None
+#             # if hasattr(doctor, 'department'):
+#             #     department = doctor.department.name  # Assuming 'name' is the attribute representing the department's name
+            
+#             # form.instance.department = department
+#             Booking.doctor.has_requested = True
+#             form.save()
+#             return redirect('appointment_success')
+#     else:
+#         # Initialize the form with doctor prepopulated
+#         form = BookingForm(initial={'doctor': doctor.id})  # Populate doctor field with doctor's id
+#         if hasattr(doctor, 'department'):
+#             form.fields['department'].initial = doctor.department.name
+        
+#     return render(request, 'medicines/appointment.html', {'form': form})
+
+
+
 def book_appointment(request, pk):
-    # Get the doctor instance
-    doctor = get_object_or_404(Doctor, id=pk)
+    # Get the doctor instance with has_requested=False
+    doctor = get_object_or_404(Doctor, id=pk, has_requested=False)
     
     if request.method == 'POST':
         form = BookingForm(request.POST)
@@ -83,14 +114,10 @@ def book_appointment(request, pk):
             form.instance.patient = patient
             form.instance.doctor = doctor  # Assign the Doctor instance directly
             
-            # Fetch the department information from the related Doctor instance
-            department = None
-            if hasattr(doctor, 'department'):
-                department = doctor.department.name  # Assuming 'name' is the attribute representing the department's name
-            
-            form.instance.department = department
-            doctor.has_requested = True
             form.save()
+            # Set has_requested to True after booking
+            doctor.has_requested = True
+            doctor.save()
             return redirect('appointment_success')
     else:
         # Initialize the form with doctor prepopulated
@@ -99,8 +126,6 @@ def book_appointment(request, pk):
             form.fields['department'].initial = doctor.department.name
         
     return render(request, 'medicines/appointment.html', {'form': form})
-
-
 
 from django.views.generic import DetailView
 from .models import Doctor

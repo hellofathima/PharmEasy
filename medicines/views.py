@@ -11,10 +11,66 @@ from django.shortcuts import render
 from .models import Medicine_inventory
 from devices.models import * 
 from django.db.models import Q
+from datetime import datetime
+from medicines.models import ExpiredMedicine, Medicine_inventory
+
+
+
+
+# def medicines_list(request):
+#     medicines = Medicine_inventory.objects.all()
+#     return render(request, 'medicines/listmed.html', {'medicines': medicines})/
+
+
+# def medicines_list(request):
+#     current_date = datetime.now().date()
+#     exp= Medicine_inventory.objects.filter(expiry_date__lt=current_date)
+   
+#     medicines = Medicine_inventory.objects.filter(expiry_date__gte=current_date)
+    
+
+#     for i in exp: 
+
+#         e=ExpiredMedicine.objects.all() 
+         
+#         if i.medicine_name not in e: 
+            
+#             ExpiredMedicine.objects.create(medicine=i)
+#         else:
+#             pass
+        
+#     return render(request, 'medicines/listmed.html', {'medicines': medicines})
+
+
+from datetime import datetime
+from django.shortcuts import render
+from .models import Medicine_inventory, ExpiredMedicine
 
 def medicines_list(request):
-    medicines = Medicine_inventory.objects.all()
+    current_date = datetime.now().date()
+    
+    expired_medicines = Medicine_inventory.objects.filter(expiry_date__lt=current_date)
+    
+    for expired_med in expired_medicines:
+        existing_entry = ExpiredMedicine.objects.filter(medicine=expired_med)
+        
+        if not existing_entry:
+            ExpiredMedicine.objects.create(medicine=expired_med)
+        else:
+            pass
+    
+    medicines = Medicine_inventory.objects.filter(expiry_date__gte=current_date)
+    
     return render(request, 'medicines/listmed.html', {'medicines': medicines})
+
+
+
+
+
+
+
+
+
 
 # def search_medicines(request):
 #     query = request.GET.get('q')
@@ -61,9 +117,11 @@ class HairfallView(TemplateView):
     template_name = 'medicines/hairfall.html'
 
     def get_context_data(self, **kwargs):
+        current_date = datetime.now().date()
+
         context = super().get_context_data(**kwargs)
         hairfall_category =Medicine_Category.objects.get(category_name='hairfall')
-        context['medicines'] = Medicine_inventory.objects.filter(category= hairfall_category )
+        context['medicines'] = Medicine_inventory.objects.filter(category= hairfall_category, expiry_date__gte=current_date)
         return context
     
 class HairfallDetailView(DetailView):
@@ -76,9 +134,11 @@ class BabyCareMedicinesView(TemplateView):
     template_name = 'medicines/babycare.html'
     
     def get_context_data(self, **kwargs):
+        current_date = datetime.now().date()
+
         context = super().get_context_data(**kwargs)
         baby_care_category = Medicine_Category.objects.get(category_name='BabyCare')
-        context['medicines'] = Medicine_inventory.objects.filter(category=baby_care_category)
+        context['medicines'] = Medicine_inventory.objects.filter(category=baby_care_category, expiry_date__gte=current_date)
         return context
     
 
@@ -91,9 +151,11 @@ class BeautyCareMedicinesView(TemplateView):
     template_name = 'medicines/beautycare.html'
 
     def get_context_data(self, **kwargs):
+        current_date = datetime.now().date()
+
         context = super().get_context_data(**kwargs)
         beauty_and_care_category =   Medicine_Category.objects.get(category_name='beauty and care')
-        context['medicines'] = Medicine_inventory.objects.filter(category=beauty_and_care_category)
+        context['medicines'] = Medicine_inventory.objects.filter(category=beauty_and_care_category, expiry_date__gte=current_date)
         return context
     
 class BeautyCareDetailView(DetailView):
@@ -106,9 +168,11 @@ class NutritionView(TemplateView):
     template_name = 'medicines/nutritionandsupplements.html'
 
     def get_context_data(self, **kwargs):
+        current_date = datetime.now().date()
+
         context = super().get_context_data(**kwargs)
         nutrition_and_care_category =   Medicine_Category.objects.get(category_name='nutrition and supplements')    
-        context['medicines'] = Medicine_inventory.objects.filter(category=nutrition_and_care_category )
+        context['medicines'] = Medicine_inventory.objects.filter(category=nutrition_and_care_category, expiry_date__gte=current_date)
         return context
     
 class NutritionDetailView(DetailView):
@@ -121,15 +185,22 @@ class DiabetesView(TemplateView):
     template_name = 'medicines/diabetis.html'
 
     def get_context_data(self, **kwargs):
+        current_date = datetime.now().date()
+
         context = super().get_context_data(**kwargs)
         diabetes_category =   Medicine_Category.objects.get(category_name='Diabetes')    
-        context['medicines'] = Medicine_inventory.objects.filter(category=diabetes_category)
+        context['medicines'] = Medicine_inventory.objects.filter(category=diabetes_category, expiry_date__gte=current_date)
         return context
     
 class DiabetesDetailView(DetailView):
     template_name = "medicines/diabetisdetails.html"  
     model=Medicine_inventory
     context_object_name="medicine"   
+
+
+
+
+
 
 
 

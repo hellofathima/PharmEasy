@@ -1,93 +1,54 @@
-<!-- medicine_detail.html -->
-{% extends 'base.html' %}
-
-{% block title %}
-    {{ medicine.medicine_name }} - Medicine Details
-{% endblock %}
-
+{% extends 'base3.html' %}
 {% block content %}
-    <style>
-        .medicine-details-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            background-color: #f9f9f9;
-        }
-
-        .medicine-details-container h1 {
-            font-size: 24px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .medicine-details-container img {
-            max-width: 100%;
-            height: auto;
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-
-        .medicine-details-container p {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .add-to-cart-form {
-            margin-top: 20px;
-        }
-
-        .add-to-cart-form button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .add-to-cart-form button:hover {
-            background-color: #0056b3;
-        }
-
-        .buy-now-link {
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 16px;
-            color: #007bff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .buy-now-link:hover {
-            color: #0056b3;
-        }
-    </style>
-
-    <div class="medicine-details-container">
-        <h1>{{ medicine.medicine_name }} - Medicine Details</h1>
-        <div>
-            <p>Price: {{ medicine.price }}</p>
-            <p>Manufacturer: {{ medicine.manufacturer }}</p>
-            <p>Expiry Date: {{ medicine.expiry_date }}</p>
-            <p>Quantity Available: {{ medicine.quantity_available }}</p>
-            <p>Category: {{ medicine.category }}</p>
-            <img src="{{ medicine.image.url }}" alt="Medicine Image">
+<style>
+    .row{
+        margin-top: 20px;
+    }
+    .figure img{
+        width: 100%;
+        height: 400px; 
+        object-fit: cover; 
+    }
+    .card-title{
+        font-size: 35px;
+        color:rgb(56, 56, 56);
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        
+    }
+    #price{
+        font-size: 25px;
+        color: rgb(16, 220, 16);
+    }
+    
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <figure class="figure">
+                {% if medicine.image %}
+                <img src="{{ medicine.image.url }}" class="figure-img img-fluid rounded" alt="{{medicine.medicine_name}}">
+                {% endif %}
+            </figure>
         </div>
-        <div class="add-to-cart-form">
-            <!-- Add to Cart Form -->
-            <form action="#" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="medicine_id" value="{{ medicine.id }}">
-               
-                <a href="{%url 'med_to_cart' medicine.id%}" id="add-to-cart" class="btn btn-primary">Add to Cart</a> 
-                <a href="#" class="btn btn-primary">Buy now</a>
-
-
+        <div class="col-6">
+            
+                    <h5 class="card-title"><b>{{ medicine.medicine_name }}</b></h5>
+                    <p class="card-text" id="price">₹{{ medicine.price }}</p>
+                    <p class="card-text">Manufacturer: {{ medicine.manufacturer }}</p>
+                    <p>Category: {{ medicine.category }}</p>
+                    <p class="card-text">Expiry Date: {{ medicine.expiry_date }}</p>
+                    <p class="card-text">Quantity Available: {{ medicine.quanity_availble }}</p>
+                    
+                    
+                        <a href="{%url 'med_to_cart' medicine.id%}" id="add-to-cart" class="btn btn-primary">Add to Cart</a> 
+                        <a href="{%url 'orderitem'%}" class="btn btn-primary">Buy now</a>
+                    
                 
+        </div>
     </div>
+</div>
+
+
+
+
 {% endblock %}
