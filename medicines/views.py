@@ -198,8 +198,7 @@ class DiabetesDetailView(DetailView):
     context_object_name="medicine"   
 
 
-
-
+# adding somthibng
 
 
 
