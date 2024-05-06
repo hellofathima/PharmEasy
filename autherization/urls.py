@@ -20,10 +20,10 @@ path('aboutus/', aboutus, name='aboutus'),
 path('admin_login/', admin_login, name="admin_login"),
 
 path('forgot/', forgot_password, name="forgot_password"),
-path('reset/', reset_password, name="reset_password"),
 path('change_password/<int:id>', change_password, name="change_password"),
 
 path('logout/', logout_view, name="logout_view"),
 path('success/', add_feedback, name="add_feedback"),
+path('feedback_success/', FeedBackSuccess.as_view(), name="feedback_success"),
 
 ]

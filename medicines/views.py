@@ -92,15 +92,12 @@ def search_medicines(request):
     medicines = []
     
     if query:
-        # Search for medicines containing the query in medicine_name or manufacturer
         medicine_results = Medicine_inventory.objects.filter(
             Q(medicine_name__icontains=query) | Q(manufacturer__icontains=query)
         )
         
-        # Search for devices containing the query in product_name
         device_results = DeviceInformation.objects.filter(product_name__icontains=query)
         
-        # Combine medicine and device results into a single list
         medicines = list(medicine_results) + list(device_results)
     
     return render(request, 'medicines/searchmedicine.html', {'medicines': medicines, 'query': query})

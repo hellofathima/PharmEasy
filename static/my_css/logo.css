@@ -1,0 +1,7 @@
+/* Custom styles for the login logo */
+.login_logo {
+    width: 100px; /* Set the width of the logo */
+    height: 50px; /* Maintain aspect ratio */
+    margin-top: 20px; /* Add margin to the top */
+    /* Add any other custom styles you need */
+}

@@ -51,21 +51,13 @@
             <div class="mb-4">
                 <button class="btn btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails{{ order.id }}" aria-expanded="false" aria-controls="collapseDetails{{ order.id }}">
                     
-                    <div class="card card-body dropdown-box">
-                        
-                    
-
-           
-
+                    <div class="card card-body dropdown-box mt-3">
                         <img src="{{ order.medicine.image.url }}" class="img-fluid img-custom rounded-start" alt="Package Image">
+                        <p><strong>Total:</strong> ₹{{ order.total_price }}</p>
+                        <p><strong>Name:</strong> {{ order.medicine.medicine_name }}</p>
+                        <p><strong>Address:</strong> {{ order.address }}</p>
+                        <p><strong>Phone:</strong> {{ order.phone }}</p>
                     </div>
-
-                    
-                    
-                    <p><strong>Total:</strong> ₹{{ order.total_price }}</p>
-                    <p><strong>Name</strong> {{order.medicine.medicine_name }}</p>
-                    <p><strong>Address:</strong> {{ order.address }}</p>
-                    <p><strong>Phone:</strong> {{ order.phone }}</p>
         
                     <div class="card card-body dropdown-box">
                         

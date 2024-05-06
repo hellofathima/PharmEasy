@@ -10,12 +10,16 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 from django.core.mail import send_mail
+from django.utils.crypto import get_random_string
+
 from django.contrib.auth import logout
 from django.core.validators import RegexValidator
 from medicines.models import *
 from devices.models import *
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView
+
 
 def index(request):
     feedbacks = Feedback.objects.all()[:4]
@@ -126,12 +130,16 @@ def add_feedback(request):
             user = request.user
             feedback = Feedback.objects.create(user=user, comment=comment)
             feedback.save()
-            # return redirect('feedback_success')  # Redirect to a success page
-            return HttpResponse("success")
+            return redirect('feedback_success') 
+            # return HttpResponse("success")
     else:
         form = FeedbackForm()
 
     return render(request, 'autherization/add_feedback.html',{'form':form})
+
+
+class FeedBackSuccess(TemplateView):
+    template_name = "autherization/feedback_success.html"
 
 
 def   doctor_panel_view(request):
@@ -162,37 +170,44 @@ def forgot_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         username = request.POST.get('username')
+        
        
         for user in user_list:
             if user.email == email and user.username == username:
                 user_id = user.id
+                otp = get_random_string(length=6, allowed_chars='1234567890')
+                print(f"Generated OTP: {otp}")
+                request.session['otp'] = otp
                 subject = "Password reset"
-                message = f"Hi {username},\n\nSomeone has requested a new password for the following account on PharmEasy.\nIf you didn't make this request, please ignore this email.\nTo reset your password, Click the following link: http://127.0.0.1:8000/autherization/change_password/{user_id}.\n\nThanks for using PharmEasy."
+                message = f"Hi {username},\n\nSomeone has requested a new password for the following account on PharmEasy.\nIf you didn't make this request, please ignore this email.\nTo reset your password, please use the following OTP (One-Time Password): {otp} .\n\nThanks for using PharmEasy."
                 email_from = "pharmeasy305@gmail.com"
                 email_to = email
                 send_mail(subject, message, email_from, [email_to])
-                return redirect(reset_password)
+                return redirect('change_password', user_id)
         else:
             return HttpResponse("Oops somthing went wrong !")
     return render(request, "autherization/forgot_password.html")
 
 
 
-def reset_password(request):
-    return render(request, "autherization/reset_password.html")
-
-
 def change_password(request, id):
-    a = NormalUser.objects.get(id=id)
+    user = NormalUser.objects.get(id=id)
     if request.method == "POST":
-        p1 = request.POST.get('password1')
-        p2 = request.POST.get('password2')
-        if p1 == p2:
-            a.set_password(p1)
-            a.save()
-            return HttpResponse("Password changed")
+        otp = request.POST.get('otp')
+        print(f"Submitted OTP: {otp}")
+        if otp == request.session['otp']:
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            if password1 == password2:
+                user.set_password(password1)
+                user.save()
+                return redirect("login")
+            else:
+                msg = 'Sorry something went wrong!'
+                return render(request, 'autherization/success.html', {'msg': msg})
         else:
-            return HttpResponse("Sorry something went wrong !")
+            msg = "otp doesn't match!"
+            return render(request, 'autherization/success.html', {'msg': msg})   
     return render(request, "autherization/change_password.html")
 
 def logout_view(request):
