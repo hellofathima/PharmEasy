@@ -1,9 +1,5 @@
-
 from django.db import models
 from autherization.models import *
-from django.db import models
-from autherization.models import *
-
 class Booking(models.Model):
     # Your existing fields
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
@@ -29,4 +25,3 @@ class Booking(models.Model):
     def __str__(self):
         return f"Booking for {self.patient.username} with {self.doctor.user.username} on {self.date} at {self.time}"
     
-

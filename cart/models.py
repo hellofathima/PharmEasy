@@ -8,6 +8,7 @@ from django.db import models
 from autherization.models import *
 from devices.models import *
 from medicines.models import *
+from django.utils import timezone
 # Create your models here.
 
 class Divicecart(models.Model):
@@ -67,6 +68,8 @@ class Account(models.Model):
     accnumber=models.IntegerField()
     acctype=models.CharField(max_length=200)
     balance=models.IntegerField()
+    
+
 
 
     def __str__(self):

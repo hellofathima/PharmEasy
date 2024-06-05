@@ -6,77 +6,102 @@
 <style>
     /* Custom CSS for button color and image size */
     .btn-custom {
-        background-color: #E7D192; /* Change button color */
-        border-color: #E7D192; /* Change button border color */
-        color: #333; /* Change button text color */
-        width: 100%; /* Ensure full width for buttons */
-        margin-bottom: 10px; /* Add spacing between buttons */
-        border-radius: 5px; /* Add rounded corners */
-        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+        background-color: #e9ccdc;
+        border-color: #f3c2e9;
+        color: #333;
+        width: 100%;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
 
     .img-custom {
-        height: 200px; /* Set fixed height for images */
-        width: 100%; /* Ensure uniform sizing */
-        object-fit: cover; /* Maintain aspect ratio */
-        border-radius: 5px; /* Add rounded corners */
-        transition: transform 0.3s ease; /* Smooth transition */
+        height: 200px;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
     }
 
     .dropdown-box {
-        width: 100%; /* Set dropdown box width to match parent */
-        background-color: #F3F3F3; /* Change background color */
-        border-radius: 5px; /* Add rounded corners */
-        padding: 10px; /* Add padding */
-        margin-top: 10px; /* Add spacing */
+        width: 100%;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 10px;
     }
 
-    /* CSS animations for hover effects */
     .btn-custom:hover {
-        background-color: #D0C17D; /* Change button color on hover */
-        border-color: #D0C17D; /* Change button border color on hover */
-        color: #fff; /* Change button text color on hover */
+        background-color: #fbc6e8;
+        border-color: #f5c3f3;
+        color: #353236;
     }
 
     .img-custom:hover {
-        transform: scale(1.05); /* Scale image on hover */
+        transform: scale(1.05);
+    }
+
+    .order-details-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 30px;
+    }
+
+    .order-details-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .order-card {
+        margin-bottom: 20px;
+    }
+
+    .order-card .card-body {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fafafa;
+    }
+
+    .order-card .card-body p {
+        margin-bottom: 10px;
+    }
+
+    .order-status, .order-price {
+        font-weight: bold;
+        color: green;
+    }
+
+    .delivery-status {
+        font-weight: bold;
+        color: red;
     }
 </style>
 
-<div class="container">
-    <h1 class="mt-4 mb-3">Your Order Details</h1>
+<div class="container order-details-container">
+    <h1 class="order-details-header">Your Order Details</h1>
     <div class="row">
         {% for order in orders %}
-        <div class="col-md-4">
-            <div class="mb-4">
+        <div class="col-md-6 order-card">
+            <div class="card mb-4">
                 <button class="btn btn-custom" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails{{ order.id }}" aria-expanded="false" aria-controls="collapseDetails{{ order.id }}">
-                    
-                    <div class="card card-body dropdown-box mt-3">
-                        <img src="{{ order.medicine.image.url }}" class="img-fluid img-custom rounded-start" alt="Package Image">
-                        <p><strong>Total:</strong> ₹{{ order.total_price }}</p>
+                    <img src="{{ order.medicine.image.url }}" class="card-img-top img-custom" alt="Package Image">
+                    <div class="card-body">
+                        <p><strong>Total:</strong><span class="order-price"> ₹{{ order.total_price }}</span></p>
                         <p><strong>Name:</strong> {{ order.medicine.medicine_name }}</p>
                         <p><strong>Address:</strong> {{ order.address }}</p>
                         <p><strong>Phone:</strong> {{ order.phone }}</p>
-                    </div>
-        
-                    <div class="card card-body dropdown-box">
-                        
+                        <p><strong>Order Status:</strong> <span class="order-status">{{ order.order_status }}</span></p>
+                        <p><strong>Delivery Status:</strong> <span class="delivery-status">{{ order.delivary_status }}</span></p>
                     
-
-                        <p><strong>Order Status:</strong> {{ order.order_status }}</p>
-                        <p><strong>Delivery Status:</strong> {{ order.delivary_status }}</p>
                     </div>
-
                 </button>
-                <div class="collapse" id="collapseDetails{{ order.id }}">
-                   
-                </div>
+                
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
-
-
-
 {% endblock %}
