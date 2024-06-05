@@ -72,10 +72,10 @@
 </head>
 <body>
     <div class="medicine_container mt-5 mb-5">
-        {% if messages %}
-            {% for message in messages %}
+        {% if msg %}
+            {% for msg in msg %}
                 <div class="alert alert-danger" role="alert">
-                    {{ message }}
+                    {{ msg }}
                 </div>
             {% endfor %}
         {% endif %}
@@ -99,7 +99,7 @@
                         <td>{{ item.quantity }}</td>
                         <td>
                             <a href="{% url 'med_to_cart' item.medicine.id %}"><i class="fa-solid fa-plus" style="color:red;"></i></a> <br><br>
-                            <a href= "{% url 'itemremove' item.medicine.id %}"><i class="fa-solid fa-minus" style="color:red;"></i></i></a><br><br>
+                            <a href= "{% url 'remove_cart_item' item.medicine.id %}"><i class="fa-solid fa-minus" style="color:red;"></i></i></a><br><br>
 
                         </td>
                         <!-- <td><a href="{% url 'remove_cart_item' item.id %}" class="btn btn-danger">Delete</a></td> -->

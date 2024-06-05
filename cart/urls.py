@@ -1,3 +1,5 @@
+
+
 from django.urls import path,include
 from .views import *
 
@@ -10,11 +12,15 @@ urlpatterns=[
     path("cart/order_confirm/", order_confirm_view, name="order_confirm_view"),
 
     path('add-to-cart/<int:id>/', medadd_to_cart, name='med_to_cart'),
-    path('cart/', medcart_view, name='med_cart_view'), 
-    path('cart/remove-from-cart/<int:id>/', remove_cart_item, name='remove_cart_item'), 
-    path("cart/medorder/",MedorderForm,name="medorder"),
-    path("cart/payment/", medorder_confirm_view, name="payment"),
-    path("cart/itemremove/<int:id>/",itemcart_remove , name="itemremove"),
-    path("order_view/", order_view, name="order_view"),
+    path('cart/', med_cart_view, name='med_cart_view'), 
+    # path('cart/remove-from-cart/<int:id>/', remove_cart_item, name='remove_cart_item'), 
+    path("cart/medorder/",payment_view,name="medorder"),
+    path("cart/payment/", order_confirm_view, name="payment"),
+    path("cart/itemremove/<int:id>/", itemcart_remove, name="remove_cart_item"),
+    path("order_view/", order_view, name="order_view"),    
+    # path("success/",successview.as_view(), name="success"),
+
+
+    
 
 ]

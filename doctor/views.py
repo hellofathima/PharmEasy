@@ -102,6 +102,16 @@ from .forms import BookingForm
 
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db import IntegrityError
+from .forms import BookingForm
+from .models import Doctor, Booking
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db import IntegrityError
+from .forms import BookingForm
+from .models import Doctor, Booking
+@login_required
 def book_appointment(request, pk):
     # Get the doctor instance with has_requested=False
     doctor = get_object_or_404(Doctor, id=pk, has_requested=False)
@@ -127,6 +137,37 @@ def book_appointment(request, pk):
         
     return render(request, 'medicines/appointment.html', {'form': form})
 
+# def book_appointment(request, pk):
+#     # Get the doctor instance with has_requested=False
+#     doctor = get_object_or_404(Doctor, id=pk, has_requested=False)
+    
+#     if request.method == 'POST':
+#         form = BookingForm(request.POST)
+#         if form.is_valid():
+#             # Get the current user and assign it to the patient field
+#             patient = request.user
+#             form.instance.patient = patient
+#             form.instance.doctor = doctor  # Assign the Doctor instance directly
+            
+#             form.save()
+#             # Set has_requested to True after booking
+#             doctor.has_requested = True
+#             doctor.save()
+#             return redirect('appointment_success')
+#     else:
+#         # Initialize the form with doctor prepopulated
+#         form = BookingForm(initial={'doctor': doctor.id})  # Populate doctor field with doctor's id
+#         if hasattr(doctor, 'department'):
+#             form.fields['department'].initial = doctor.department.name
+        
+#     return render(request, 'medicines/appointment.html',{'form':form})
+
+
+def appointment_success(request):
+    return render(request, 'medicines/appointmentsuccess.html')
+
+
+
 from django.views.generic import DetailView
 from .models import Doctor
 
@@ -136,55 +177,88 @@ class DoctorDetailView(DetailView):
     context_object_name = 'doctor'
 
 
-def appointment_success(request):
-    return render(request, 'medicines/appointmentsuccess.html')
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(never_cache, name='dispatch')
-class DoctorUserList(ListView):
-    model = Booking
-    template_name = 'medicines/doctor_panel.html'
-    context_object_name = "doctor_user"
+# @method_decorator(login_required, name='dispatch')
+# @method_decorator(never_cache, name='dispatch')
+# class DoctorUserList(ListView):
+#     model = Booking
+#     template_name = 'medicines/doctor_panel.html'
+#     context_object_name = "doctor_user"
 
-    def get_queryset(self):
-    #    nurse=self.request.user
-       queryset = super().get_queryset()
+#     def get_queryset(self):
+#     #    nurse=self.request.user
+#        queryset = super().get_queryset()
 
-       queryset = queryset.filter(doctor=self.request.user.id,is_confirmed=False)
-       return queryset
+#        queryset = queryset.filter(doctor=self.request.user.id,is_confirmed=False)
+#        return queryset
     
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from .models import Booking, Doctor
+
+
+
+
+from django.http import HttpResponseForbidden
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from .models import Booking
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseForbidden
+from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from .models import Booking
+
+@login_required(login_url='/login/')
+def doctor_panel(request):
+    if not request.user.is_doctor:
+        return HttpResponseForbidden("You are not authorized to view this page.")
+
+    doctor = get_object_or_404(Doctor, user=request.user)
+    bookings = Booking.objects.filter(doctor=doctor, is_confirmed=False)
+
+    return render(request, 'medicines/doctor_panel.html', {'bookings': bookings})
+
+@login_required(login_url='/login/')
 def request_approval(request, id):
-    bookings = Booking.objects.filter(id=id)
-    
-    for booking in bookings:
-        user_name = booking.patient.username
-        user_email = booking.patient.email
-        booking.is_confirmed = True
-        booking.save()
+    booking = get_object_or_404(Booking, id=id)
 
-    # Update nurse availability
-    doctor = Doctor.objects.get(user=request.user)
+   
+    booking.is_confirmed = True
+    booking.save()
+
+    doctor = booking.doctor
     doctor.is_available = False
     doctor.save()
 
-    # Send email to user
-    subject = "Your Home Nurse Request Has Been Approved"
+    user_name = booking.patient.username
+    user_email = booking.patient.email
+    subject = "Your Doctor Request Has Been Approved"
     message = (
         f"Dear {user_name},\n\n"
-        "We are pleased to inform you that your request for doctor appoinment has been approved!\n\n"
+        "We are pleased to inform you that your request for a doctor appointment has been approved!\n\n"
         "At Pharmeasy, we are committed to providing you with the best possible care and support.\n\n"
         "Your assigned nurse will be in touch with you shortly to discuss the details of your care plan.\n\n"
-        "Thank you for choosing CareLink. We look forward to assisting you in your journey to better health.\n\n"
+        "Thank you for choosing PharmEasy. We look forward to assisting you in your journey to better health.\n\n"
         "Best regards,\n"
         "The PharmEasy Team"
     )
     email_from = "pharmeasy305@gmail.com"
-    email_to = user_email
-    send_mail(subject, message, email_from, [email_to])
+    send_mail(subject, message, email_from, [user_email])
 
+    return redirect('doctor_panel')
+
+def Changestatus(request, id):
+    booking = get_object_or_404(Booking, id=id)
+    doctor = booking.doctor
+    doctor.is_available = True
+    doctor.has_requested = False
+    doctor.save()
+    
     return redirect('doctorpanel')
-
 
 
 def doctor_profile(request):
@@ -262,7 +336,3 @@ class DoctorProfileUpdateView(LoginRequiredMixin, UpdateView):
 
 
    
-
-
-
-

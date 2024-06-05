@@ -51,14 +51,23 @@ from .models import Booking
 from django import forms
 from .models import Booking
 
+from django import forms
+from .models import Booking
+
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = [ 'date', 'time', 'reason']
+        fields = ['date', 'time', 'reason']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
-            'time': forms.TimeInput(attrs={'type': 'time', 'style': 'width: 200px; height: 40px; padding: 5px;'}),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        if date < date.today():
+            raise forms.ValidationError("Booking date cannot be in the past.")
+        return date
 
 class DoctorProfileUpdateForm(forms.ModelForm):
     email = forms.EmailField(label='Email', required=False)

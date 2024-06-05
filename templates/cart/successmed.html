@@ -8,6 +8,8 @@
 </style>
 <div class="container mt-5 mb-5">
      <h3 class="text-center text-success">{{msg}}</h3>
+     <h3 class="text-center text-success">Total amount paid: ₹{{total|default:"0"}}</h3>
+
      <h3 class="text-center text-success">Thank you</h3>
      <p class="text-center"><a href="{% url 'medicines_list' %}"> continue shopping</p>
 

@@ -19,11 +19,14 @@ from devices.models import *
 from django.views.decorators.cache import never_cache
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from doctor.models import *
+from datetime import datetime
 
 
 def index(request):
     feedbacks = Feedback.objects.all()[:4]
-    medicines = Medicine_inventory.objects.all()[:6]
+    current_date = datetime.now().date()
+    medicines = Medicine_inventory.objects.filter(expiry_date__gte=current_date)[:6]
     devices = DeviceInformation.objects.all()[:4]
     return render(request, "autherization/index.html", {'feedbacks': feedbacks, 'medicines': medicines, 'devices':devices})
 
@@ -85,6 +88,45 @@ def base3(request):
 
 
 
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = AuthenticationForm(request, data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+            
+#             if user.is_doctor:  
+#                 return redirect('doctorpanel')  
+#             elif user.is_customer:
+#                 return redirect('customerpanel') 
+            
+#             else:
+                
+#                 return redirect('index')
+            
+#         # return redirect('index')
+#         else:
+            
+#             messages.error(request, 'Invalid username or password. Please try again.')
+#             return redirect('login')  
+#     else:
+
+#         form = AuthenticationForm()
+#     return render(request, 'autherization/login.html', {'form': form})
+
+
+
+
+
+
+
+
+
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib import messages
+from django.shortcuts import redirect, render
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -92,31 +134,26 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             
-            if user.is_doctor:  
+            if user.is_doctor:
                 return redirect('doctorpanel')  
             elif user.is_customer:
                 return redirect('customerpanel') 
-            
             else:
-                
                 return redirect('index')
-            
-        # return redirect('index')
         else:
-            
             messages.error(request, 'Invalid username or password. Please try again.')
-            return redirect('login')  
+            return redirect('autherization:login_view')  
     else:
-
         form = AuthenticationForm()
     return render(request, 'autherization/login.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='/login/')
 @never_cache
 def customer_panel_view(request):
     feedbacks = Feedback.objects.all()[:4]
-    medicines = Medicine_inventory.objects.all()[:6]
+    current_date = datetime.now().date()
+    medicines = Medicine_inventory.objects.filter(expiry_date__gte=current_date)[:6]
     devices = DeviceInformation.objects.all()[:4]
 
     return render(request, "autherization/customer_panel.html", {'feedbacks': feedbacks, 'medicines': medicines, 'devices':devices})
@@ -142,8 +179,10 @@ class FeedBackSuccess(TemplateView):
     template_name = "autherization/feedback_success.html"
 
 
-def   doctor_panel_view(request):
-    return render(request, 'autherization/doctor_panel.html')
+def doctor_panel_view(request):
+    doctor = request.user.doctor
+    bookings = Booking.objects.filter(is_confirmed = True , doctor = doctor).order_by("time"and"date")
+    return render(request, 'autherization/doctor_panel.html', {'bookings': bookings})
 
 
 
